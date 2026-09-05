@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shamir's Secret Sharing Solver | Placement Drive</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    code, pre, .font-mono { font-family: 'JetBrains Mono', monospace; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
+
+  <!-- Navigation / Header -->
+  <header class="border-b border-slate-800 bg-slate-900/60 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center font-bold text-lg shadow-lg shadow-indigo-500/25">
+          SSS
+        </div>
+        <div>
+          <h1 class="text-lg font-bold text-white tracking-tight">Shamir's Secret Sharing Solver</h1>
+          <p class="text-xs text-slate-400">Polynomial Root & Outlier Detection Engine</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-3">
+        <a href="https://github.com/KoppuravuriSrinivas-crypto/clg-placement-Drive" target="_blank" class="px-4 py-2 text-sm font-medium text-slate-300 bg-slate-800 hover:bg-slate-700 hover:text-white rounded-lg transition border border-slate-700 flex items-center space-x-2">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          <span>GitHub Repo</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full space-y-8">
+
+    <!-- Top Banner -->
+    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-950/70 via-purple-950/50 to-slate-900 border border-indigo-900/40 p-6 sm:p-8">
+      <div class="relative z-10 max-w-2xl">
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 mb-3">
+          Online Placement Drive Assignment
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+          Solve Polynomial Roots & Uncover the Secret
+        </h2>
+        <p class="mt-2 text-sm sm:text-base text-slate-300">
+          Decodes roots provided in arbitrary bases, applies exact-precision Lagrange interpolation, eliminates imposter points, and computes the constant term $c = P(0)$.
+        </p>
+      </div>
+      <div class="absolute right-0 top-0 bottom-0 w-1/3 bg-gradient-to-l from-indigo-600/10 to-transparent pointer-events-none"></div>
+    </div>
+
+    <!-- Inputs & Preset Actions -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Left Column: Input -->
+      <div class="lg:col-span-5 space-y-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="font-semibold text-white text-sm flex items-center space-x-2">
+              <span>Input JSON Data</span>
+            </h3>
+            <div class="flex space-x-2">
+              <button onclick="loadTestCase(1)" class="px-2.5 py-1 text-xs font-semibold rounded bg-indigo-600/20 text-indigo-300 border border-indigo-500/30 hover:bg-indigo-600/30 transition">
+                Test Case 1
+              </button>
+              <button onclick="loadTestCase(2)" class="px-2.5 py-1 text-xs font-semibold rounded bg-purple-600/20 text-purple-300 border border-purple-500/30 hover:bg-purple-600/30 transition">
+                Test Case 2
+              </button>
+            </div>
+          </div>
+
+          <textarea id="jsonInput" rows="14" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-xs font-mono text-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition resize-none" placeholder="Paste your test case JSON here..."></textarea>
+
+          <button onclick="solve()" class="w-full py-2.5 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-semibold rounded-lg shadow-lg shadow-indigo-600/25 transition duration-200 flex items-center justify-center space-x-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            <span>Solve Secret (c)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Column: Results -->
+      <div class="lg:col-span-7 space-y-6">
+        
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+            <div class="text-xs font-medium text-slate-400">Secret (Constant Term c)</div>
+            <div id="statSecret" class="text-xl sm:text-2xl font-extrabold text-indigo-400 mt-1 truncate select-all">-</div>
+            <div class="text-[11px] text-slate-500 mt-1">Value at P(0)</div>
+          </div>
+          <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+            <div class="text-xs font-medium text-slate-400">Polynomial Degree (m)</div>
+            <div id="statDegree" class="text-xl sm:text-2xl font-extrabold text-purple-400 mt-1">-</div>
+            <div class="text-[11px] text-slate-500 mt-1">m = k - 1</div>
+          </div>
+          <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+            <div class="text-xs font-medium text-slate-400">Outlier Points</div>
+            <div id="statOutliers" class="text-xl sm:text-2xl font-extrabold text-emerald-400 mt-1">-</div>
+            <div class="text-[11px] text-slate-500 mt-1">Imposter roots detected</div>
+          </div>
+        </div>
+
+        <!-- Roots & Verification Table -->
+        <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+          <div class="px-5 py-4 border-b border-slate-800 flex items-center justify-between">
+            <h3 class="font-semibold text-white text-sm">Decoded Roots & Consistency Check</h3>
+            <span id="rootsCountBadge" class="text-xs text-slate-400">0 roots parsed</span>
+          </div>
+          <div class="overflow-x-auto max-h-72">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead class="bg-slate-950/70 text-slate-400 sticky top-0 border-b border-slate-800">
+                <tr>
+                  <th class="py-2.5 px-4 font-semibold">x</th>
+                  <th class="py-2.5 px-4 font-semibold">Base</th>
+                  <th class="py-2.5 px-4 font-semibold">Encoded Value</th>
+                  <th class="py-2.5 px-4 font-semibold">Decoded Y (Base 10)</th>
+                  <th class="py-2.5 px-4 font-semibold text-right">Status</th>
+                </tr>
+              </thead>
+              <tbody id="rootsTableBody" class="divide-y divide-slate-800/60 font-mono text-slate-300">
+                <tr>
+                  <td colspan="5" class="py-8 text-center text-slate-500 font-sans">
+                    Click "Test Case 1" or "Test Case 2" or paste JSON to view decoded roots.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Terminal Output -->
+        <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 font-mono text-xs text-slate-300 space-y-2">
+          <div class="flex items-center justify-between border-b border-slate-800/80 pb-2 text-slate-500 text-[11px]">
+            <span>CONSOLE EXECUTION LOG</span>
+            <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          </div>
+          <pre id="consoleLog" class="overflow-x-auto text-emerald-400 max-h-40 leading-relaxed">// Ready. Waiting for execution...</pre>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="border-t border-slate-800 py-6 text-center text-xs text-slate-500">
+    Placement Drive Assignment &bull; Shamir's Secret Sharing Solver &bull; Deployed via GitHub Pages
+  </footer>
+
+  <script>
+    const TESTCASE_1 = {
+      "keys": { "n": 4, "k": 3 },
+      "1": { "base": "10", "value": "4" },
+      "2": { "base": "2", "value": "111" },
+      "3": { "base": "10", "value": "12" },
+      "6": { "base": "4", "value": "213" }
+    };
+
+    const TESTCASE_2 = {
+      "keys": { "n": 10, "k": 7 },
+      "1": { "base": "6", "value": "13444211440455345511" },
+      "2": { "base": "15", "value": "aed7015a346d635" },
+      "3": { "base": "15", "value": "6aeeb69631c227c" },
+      "4": { "base": "16", "value": "e1b5e05623d881f" },
+      "5": { "base": "8", "value": "316034514573652620673" },
+      "6": { "base": "3", "value": "2122212201122002221120200210011020220200" },
+      "7": { "base": "3", "value": "20120221122211000100210021102001201112121" },
+      "8": { "base": "6", "value": "20220554335330240002224253" },
+      "9": { "base": "12", "value": "45153788322a1255483" },
+      "10": { "base": "7", "value": "1101613130313526312514143" }
+    };
+
+    class BigFraction {
+      constructor(num, den = 1n) {
+        if (den < 0n) {
+          num = -num;
+          den = -den;
+        }
+        const g = BigFraction.gcd(num < 0n ? -num : num, den);
+        this.num = num / g;
+        this.den = den / g;
+      }
+      static gcd(a, b) {
+        while (b !== 0n) {
+          let t = b;
+          b = a % b;
+          a = t;
+        }
+        return a;
+      }
+      add(other) {
+        return new BigFraction(this.num * other.den + other.num * this.den, this.den * other.den);
+      }
+      multiply(other) {
+        return new BigFraction(this.num * other.num, this.den * other.den);
+      }
+    }
+
+    function parseBigIntBase(str, base) {
+      const chars = '0123456789abcdefghijklmnopqrstuvwxyz';
+      str = str.trim().toLowerCase();
+      const b = BigInt(base);
+      let result = 0n;
+      for (const char of str) {
+        const val = BigInt(chars.indexOf(char));
+        if (val < 0n || val >= b) continue;
+        result = result * b + val;
+      }
+      return result;
+    }
+
+    function evaluateLagrange(points, targetX) {
+      const k = points.length;
+      let total = new BigFraction(0n, 1n);
+      for (let i = 0; i < k; i++) {
+        let num = 1n;
+        let den = 1n;
+        for (let j = 0; j < k; j++) {
+          if (i === j) continue;
+          num *= (targetX - points[j].x);
+          den *= (points[i].x - points[j].x);
+        }
+        const basis = new BigFraction(num, den);
+        const term = new BigFraction(points[i].y, 1n).multiply(basis);
+        total = total.add(term);
+      }
+      return total;
+    }
+
+    function getCombinations(arr, k) {
+      const result = [];
+      function backtrack(start, current) {
+        if (current.length === k) {
+          result.push([...current]);
+          return;
+        }
+        for (let i = start; i < arr.length; i++) {
+          current.push(arr[i]);
+          backtrack(i + 1, current);
+          current.pop();
+        }
+      }
+      backtrack(0, []);
+      return result;
+    }
+
+    function loadTestCase(num) {
+      const data = num === 1 ? TESTCASE_1 : TESTCASE_2;
+      document.getElementById('jsonInput').value = JSON.stringify(data, null, 2);
+      solve();
+    }
+
+    function solve() {
+      const logEl = document.getElementById('consoleLog');
+      try {
+        const raw = document.getElementById('jsonInput').value.trim();
+        if (!raw) return;
+        const data = JSON.parse(raw);
+
+        const n = Number(data.keys.n);
+        const k = Number(data.keys.k);
+        const degree = k - 1;
+
+        const points = [];
+        const rawRows = [];
+
+        for (const key of Object.keys(data)) {
+          if (key === 'keys') continue;
+          const x = BigInt(key);
+          const base = parseInt(data[key].base, 10);
+          const encVal = data[key].value;
+          const y = parseBigIntBase(encVal, base);
+          points.push({ x, y, base, encVal });
+        }
+
+        points.sort((a, b) => (a.x < b.x ? -1 : a.x > b.x ? 1 : 0));
+
+        // Find consensus polynomial
+        const combinations = getCombinations(points, k);
+        const secretCounts = new Map();
+        const secretCombos = new Map();
+
+        for (const combo of combinations) {
+          const c = evaluateLagrange(combo, 0n);
+          if (c.den === 1n) {
+            const secretStr = c.num.toString();
+            secretCounts.set(secretStr, (secretCounts.get(secretStr) || 0) + 1);
+            if (!secretCombos.has(secretStr)) {
+              secretCombos.set(secretStr, combo);
+            }
+          }
+        }
+
+        let bestSecret = '';
+        let maxCount = -1;
+        for (const [secret, count] of secretCounts.entries()) {
+          if (count > maxCount) {
+            maxCount = count;
+            bestSecret = secret;
+          }
+        }
+
+        const bestCombo = secretCombos.get(bestSecret);
+        const wrongPoints = [];
+
+        for (const pt of points) {
+          const evalY = evaluateLagrange(bestCombo, pt.x);
+          const isMatch = (evalY.den === 1n && evalY.num === pt.y);
+          if (!isMatch) wrongPoints.push(pt.x.toString());
+          pt.isMatch = isMatch;
+        }
+
+        // Update UI Summary
+        document.getElementById('statSecret').textContent = bestSecret || 'Error';
+        document.getElementById('statDegree').textContent = degree;
+        
+        const outlierEl = document.getElementById('statOutliers');
+        if (wrongPoints.length > 0) {
+          outlierEl.textContent = `${wrongPoints.length} (x = ${wrongPoints.join(', ')})`;
+          outlierEl.className = 'text-xl sm:text-2xl font-extrabold text-amber-400 mt-1 truncate';
+        } else {
+          outlierEl.textContent = 'None (All Valid)';
+          outlierEl.className = 'text-xl sm:text-2xl font-extrabold text-emerald-400 mt-1 truncate';
+        }
+
+        document.getElementById('rootsCountBadge').textContent = `${points.length} roots loaded`;
+
+        // Update Table
+        const tbody = document.getElementById('rootsTableBody');
+        tbody.innerHTML = '';
+        for (const pt of points) {
+          const tr = document.createElement('tr');
+          tr.className = pt.isMatch ? 'hover:bg-slate-800/40' : 'bg-red-950/20 hover:bg-red-950/30';
+          tr.innerHTML = `
+            <td class="py-2.5 px-4 font-semibold text-white">${pt.x}</td>
+            <td class="py-2.5 px-4 text-slate-400">${pt.base}</td>
+            <td class="py-2.5 px-4 text-slate-400 max-w-[140px] truncate" title="${pt.encVal}">${pt.encVal}</td>
+            <td class="py-2.5 px-4 text-indigo-300 max-w-[180px] truncate" title="${pt.y.toString()}">${pt.y.toString()}</td>
+            <td class="py-2.5 px-4 text-right">
+              ${pt.isMatch 
+                ? '<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Valid Point</span>' 
+                : '<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20">Outlier / Imposter</span>'}
+            </td>
+          `;
+          tbody.appendChild(tr);
+        }
+
+        // Update Console Log
+        logEl.textContent = [
+          `[Execution Success]`,
+          `> Total points provided (n): ${n}`,
+          `> Minimum points required (k): ${k}`,
+          `> Degree of polynomial (m): ${degree}`,
+          `> Secret (Constant Term c = P(0)): ${bestSecret}`,
+          wrongPoints.length > 0 
+            ? `> Outlier points detected: x = ${wrongPoints.join(', ')}`
+            : `> Consistency check: All ${n} points lie strictly on the polynomial curve.`
+        ].join('\n');
+
+      } catch (err) {
+        logEl.textContent = `[Error]: ${err.message}`;
+      }
+    }
+
+    // Initialize with TestCase 1 on load
+    window.addEventListener('DOMContentLoaded', () => loadTestCase(1));
+  </script>
+</body>
+</html>
